@@ -1,0 +1,12 @@
+[ID:mod_based_procedurals]
+[NUMERIC_VERSION:1]
+[DISPLAYED_VERSION:v0.0.1]
+[EARLIEST_COMPATIBLE_NUMERIC_VERSION:1]
+[EARLIEST_COMPATIBLE_DISPLAYED_VERSION:v0.0.1]
+[AUTHOR:Voliol]
+[NAME:Mod-Based Procedurals]
+[DESCRIPTION:This mod aims to replace Vanilla's generators for procedural creatures (forgotten beasts, titans, werebeasts etc.) with ones that are based not "hard-coded" random creature profiles, but on the creatures found in the raws. Experience procedural monsters based on the mods you have installed!]
+
+[STEAM_TITLE:Mod-Based Procedurals]
+[STEAM_DESCRIPTION:This mod aims to replace Vanilla's generators for procedural creatures (forgotten beasts, titans, werebeasts etc.) with ones that are based not "hard-coded" random creature profiles, but on the creatures found in the raws. Experience procedural monsters based on the mods you have installed!]
+[STEAM_TAG:creature]
