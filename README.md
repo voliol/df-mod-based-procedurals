@@ -1,0 +1,1 @@
+This is a *very* WIP Dwarf Fortress mod, using the new Lua tools. It is quite a bit from fulfilling the mod description found in info.txt yet. Though that is the goal.
