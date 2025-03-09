@@ -1,5 +1,4 @@
-
--- this should override the default FB implementation, making them all into toads.
+creatures.fb.default=nil
 creatures.fb.default=function(layer_type,tok)
     local tbl={}
     tbl=split_to_lines(tbl,[[
