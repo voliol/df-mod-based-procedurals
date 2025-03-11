@@ -13,8 +13,8 @@ end
 function print_table_2_inner(tbl, depth, max_depth)
     if type(tbl) ~= "table" then return end
 	if depth == max_depth then
-		log_2(depth, "...", #tbl)
-		return end
+		log_2(depth, "...", #tbl + 1)
+		return
 	end
     for k,v in pairs(tbl) do
         log_2(depth, k,v)
@@ -35,24 +35,44 @@ creatures.fb.default=function(layer_type,tok)
 
 	if not tests_done then
 		log("===START===")
-		
-		log("\n===Printing all NATURAL_ANIMAL creatures===")
+
+		log("\n===Printing all HAS_ANY_INTELLIGENT_LEARNS creature IDs===")
 		i = 1
-		cr1 = world.creature.creature[i]
-		while cr1 do
-			if (cr1.tags.NATURAL_ANIMAL) do
-				log("\t"..world.creature[i].token)
+		c = world.creature.creature[i]
+		while c do
+			if c.flags.HAS_ANY_INTELLIGENT_LEARNS then
+				log("\t"..c.token)
 			end
 			i = i + 1
-			cr1 = world.creature.creature[i]
+			c = world.creature.creature[i]
 		end
 		
 		log("\n===Printing random MEGABEAST shallowly===")
-		cr1 = world.creature.random_creature("MEGABEAST")
-		print_table_2(cr1, 1)
+		c = world.creature.get_random_creature("MEGABEAST")
+		print_table_2(c, 1)
 		
 		log("\n===Printing world shallowly===")
 		print_table_2(world, 1)
+		
+		log("\n===Printing world less shallowly===")
+		print_table_2(world, 2)
+		
+		log("\n===Printing world.creature shallowly===")
+		print_table_2(world.creature, 1)
+		
+		log("\n===Printing world.creature less shallowly===")
+		print_table_2(world.creature, 2)
+		
+		log("\n===Printing world.creature.creature[1] less shallowly===")
+		log(world.creature.creature[1])
+		log(#world.creature.creature[1] + 1)
+		print_table_2(world.creature.creature[1], 2)
+		
+		log("\n===Printing current_definition shallowly===")
+		log(world.creature.creature.TOAD.current_definition)
+		log(world.creature.creature[1].current_definition)
+		print_table_2(world.creature.creature.TOAD.current_definition, 1)
+		
 		
 		log("===END===")
 		tests_done=true
