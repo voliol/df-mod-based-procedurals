@@ -1,82 +1,64 @@
+function log_2(depth, ...)
+    local s=""
+	for i=0,depth do
+		s=s.."\t"
+	end
+    local args=table.pack(...)
+    for i=1,args.n do
+        s=s..tostring(args[i]).." "
+    end
+    lua_log(s)
+end
+
+function print_table_2_inner(tbl, depth, max_depth)
+    if type(tbl) ~= "table" then return end
+	if depth == max_depth then
+		log_2(depth, "...", #tbl)
+		return end
+	end
+    for k,v in pairs(tbl) do
+        log_2(depth, k,v)
+        print_table_2_inner(v, depth + 1, max_depth)
+    end
+end
+
+function print_table_2(tbl, max_depth)
+    print_table_2_inner(tbl, 0, max_depth)
+end
+
+tests_done=false
+
 creatures.fb.default=nil
 creatures.fb.default=function(layer_type,tok)
     local tbl={}
-    tbl=split_to_lines(tbl,[[
-	[DESCRIPTION:A squat amphibian with leathery skin. It is enourmous and bloodthirsty.]
-	[NAME:forgotten toad:forgotten toads:forgotten toad]
-	[CASTE_NAME:forgotten toad:forgotten toads:forgotten toad]
-	[CREATURE_TILE:F][COLOR:2:0:0]
-	[AMPHIBIOUS][NO_WINTER][UNDERSWIM]
-	[NATURAL][PET_EXOTIC]
-	[NOT_BUTCHERABLE]
-	[BIOME:ANY_POOL]
-	[POPULATION_NUMBER:250:500]
-	[PREFSTRING:beauty]
-	[BODY:QUADRUPED_NECK:2EYES:NOSE:2LUNGS:HEART:GUTS:ORGANS:THROAT:NECK:SPINE:BRAIN:SKULL:MOUTH:TONGUE:RIBCAGE]
-	[BODY_DETAIL_PLAN:STANDARD_MATERIALS]
-		[REMOVE_MATERIAL:HAIR]
-	[BODY_DETAIL_PLAN:STANDARD_TISSUES]
-		[REMOVE_TISSUE:HAIR]
-	[BODY_DETAIL_PLAN:VERTEBRATE_TISSUE_LAYERS:SKIN:FAT:MUSCLE:BONE:CARTILAGE]
-	[SELECT_TISSUE_LAYER:HEART:BY_CATEGORY:HEART]
-	 [PLUS_TISSUE_LAYER:SKIN:BY_CATEGORY:THROAT]
-		[TL_MAJOR_ARTERIES]
-	[BODY_DETAIL_PLAN:STANDARD_HEAD_POSITIONS]
-	[BODY_DETAIL_PLAN:HUMANOID_RIBCAGE_POSITIONS]
-	[USE_MATERIAL_TEMPLATE:SINEW:SINEW_TEMPLATE]
-	[TENDONS:LOCAL_CREATURE_MAT:SINEW:200]
-	[LIGAMENTS:LOCAL_CREATURE_MAT:SINEW:200]
-	[HAS_NERVES]
-	[APPLY_CREATURE_VARIATION:STANDARD_WALK_CRAWL_GAITS:9000:8900:8825:8775:9500:9900] 1 kph
-	[APPLY_CREATURE_VARIATION:STANDARD_CRAWLING_GAITS:9000:8900:8825:8775:9500:9900] 1 kph
-	[APPLY_CREATURE_VARIATION:STANDARD_SWIMMING_GAITS:9000:8900:8825:8775:9500:9900] 1 kph
-	[SWIMS_INNATE]
-	[USE_MATERIAL_TEMPLATE:BLOOD:BLOOD_TEMPLATE]
-	[BLOOD:LOCAL_CREATURE_MAT:BLOOD:LIQUID]
-	[CREATURE_CLASS:GENERAL_POISON]
-	[GETS_WOUND_INFECTIONS]
-	[GETS_INFECTIONS_FROM_ROT]
-	[USE_MATERIAL_TEMPLATE:PUS:PUS_TEMPLATE]
-	[PUS:LOCAL_CREATURE_MAT:PUS:LIQUID]
-	[BODY_SIZE:0:0:10000000]
-	[BODY_APPEARANCE_MODIFIER:LENGTH:90:95:98:100:102:105:110]
-	[BODY_APPEARANCE_MODIFIER:HEIGHT:90:95:98:100:102:105:110]
-	[BODY_APPEARANCE_MODIFIER:BROADNESS:90:95:98:100:102:105:110]
-	[MAXAGE:2:3]
-	[ATTACK:BITE:BODYPART:BY_CATEGORY:MOUTH]
-		[ATTACK_SKILL:BITE]
-		[ATTACK_VERB:bite:bites]
-		[ATTACK_CONTACT_PERC:100]
-		[ATTACK_PREPARE_AND_RECOVER:3:3]
-		[ATTACK_PRIORITY:MAIN]
-		[ATTACK_FLAG_CANLATCH]
-	[NOCTURNAL]
-	[MUNDANE]
-	[CASTE:FEMALE]
-		[FEMALE]
-	[CASTE:MALE]
-		[MALE]
-	[SELECT_CASTE:ALL]
-		[SET_TL_GROUP:BY_CATEGORY:ALL:SKIN]
-			[TL_COLOR_MODIFIER:DARK_GREEN:1]
-				[TLCM_NOUN:skin:SINGULAR]
-		[SET_TL_GROUP:BY_CATEGORY:EYE:EYE]
-			[TL_COLOR_MODIFIER:BLACK:1]
-				[TLCM_NOUN:eyes:PLURAL]
-    [FEATURE_BEAST]
-    [ATTACK_TRIGGER:0:0:2]
-    [CARNIVORE]
-    [DIFFICULTY:10]
+    tbl=split_to_lines(tbl,[[[BODY:RCP_SIMPLE_BODY]])
 
-    [NATURAL_SKILL:WRESTLING:6]
-    [NATURAL_SKILL:BITE:6]
-    [NATURAL_SKILL:GRASP_STRIKE:6]
-    [NATURAL_SKILL:STANCE_STRIKE:6]
-    [NATURAL_SKILL:MELEE_COMBAT:6]
-    [NATURAL_SKILL:DODGING:6]
-    [NATURAL_SKILL:SITUATIONAL_AWARENESS:6]
-    [LARGE_PREDATOR]
+	if not tests_done then
+		log("===START===")
+		
+		log("\n===Printing all NATURAL_ANIMAL creatures===")
+		i = 1
+		cr1 = world.creature.creature[i]
+		while cr1 do
+			if (cr1.tags.NATURAL_ANIMAL) do
+				log("\t"..world.creature[i].token)
+			end
+			i = i + 1
+			cr1 = world.creature.creature[i]
+		end
+		
+		log("\n===Printing random MEGABEAST shallowly===")
+		cr1 = world.creature.random_creature("MEGABEAST")
+		print_table_2(cr1, 1)
+		
+		log("\n===Printing world shallowly===")
+		print_table_2(world, 1)
+		
+		log("===END===")
+		tests_done=true
+	end
 	
-    ]])
+	
     return {creature=tbl,weight=1}
 end
+
